@@ -4,10 +4,8 @@
     <meta charset="UTF-8">
     <title>在庫管理リスト</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    {{-- 外部CSSファイルの読み込み --}}
-    <link rel="stylesheet" href="{{ asset('app.css') }}">
-    {{-- 外部JavaScriptファイルの読み込み --}}
-    <script src="{{ asset('app.js') }}" defer></script>
+    {{-- Viteを使用してアセットを読み込み --}}
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body>
     <h1>在庫管理リスト</h1>
