@@ -43,5 +43,18 @@ jobs:
       - name: Generate app key
         run: php artisan key:generate
 
+      # 追加：Node.jsとViteビルドの準備
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install NPM dependencies
+        run: npm ci
+
+      - name: Build assets (Vite)
+        run: npm run build
+
+
       - name: Execute tests
         run: php artisan test
