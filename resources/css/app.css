@@ -1,11 +1,193 @@
-@import 'tailwindcss';
+/* ===== 全体のスタイル ===== */
+body { 
+    font-family: sans-serif; 
+    margin: 20px; 
+    background-color: #f5f5f5;
+}
 
-@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
-@source '../../storage/framework/views/*.php';
-@source '../**/*.blade.php';
-@source '../**/*.js';
+h1 { 
+    margin-bottom: 20px;
+    color: #333;
+}
 
-@theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+/* ===== 数量入力エリア（+ - ボタンと数値表示） ===== */
+.quantity-area {
+    display: flex;           /* 横並びに配置 */
+    align-items: center;     /* 縦方向の中央揃え */
+    gap: 8px;                /* 要素間の隙間 */
+    margin-bottom: 10px;
+}
+
+button, input[type="number"] {
+    height: 36px;
+    font-size: 16px;
+}
+
+input[type="number"] {
+    width: 100px;
+    text-align: right;       /* 数字を右揃えに */
+    font-weight: bold;
+    border: 1px solid #ccc;
+    padding: 5px;
+}
+
+.time {
+    margin-left: 20px;
+    font-weight: bold;
+    font-size: 16px;
+    color: #0066cc;
+}
+
+/* ===== コメント入力と追加ボタンのエリア ===== */
+textarea {
+    width: 250px;
+    height: 60px;
+    font-size: 14px;
+    vertical-align: middle;
+    border: 1px solid #ccc;
+    padding: 5px;
+    resize: vertical;        /* 縦方向のみリサイズ可能 */
+}
+
+.add-area {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.add-area button {
+    height: 60px;
+    padding: 0 15px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.add-area button:hover {
+    background-color: #218838;
+}
+
+/* ===== データ一覧テーブル ===== */
+table {
+    border-collapse: collapse;  /* セルの境界線を重ねる */
+    width: 100%;
+    margin-top: 20px;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: center;
+}
+
+th {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+}
+
+/* 奇数行と偶数行で背景色を変える（見やすくするため） */
+tr:nth-child(odd) { 
+    background-color: #f0f8ff;  /* 薄い青 */
+}
+
+tr:nth-child(even) { 
+    background-color: #ffffff;  /* 白 */
+}
+
+/* チェックされた行は緑色に */
+tr.checked { 
+    background-color: #c8e6c9 !important;  /* 薄い緑 */
+}
+
+/* 数量列は右寄せ */
+.qty-cell {
+    text-align: right;
+    font-weight: bold;
+}
+
+/* ===== 下部ボタンエリア（合計数量・クリア） ===== */
+.btn-area {
+    margin-top: 15px;
+    display: flex;
+    justify-content: flex-start;  /* 左寄せ */
+    gap: 10px;
+}
+
+.btn-area button {
+    padding: 8px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    border: none;
+    border-radius: 4px;
+}
+
+/* 合計数量ボタン */
+#showTotal {
+    background-color: #007bff;
+    color: white;
+}
+
+#showTotal:hover {
+    background-color: #0056b3;
+}
+
+/* クリアボタン */
+.btn-area form button {
+    background-color: #ffc107;
+    color: #333;
+}
+
+.btn-area form button:hover {
+    background-color: #e0a800;
+}
+
+/* ===== 削除ボタンのスタイル ===== */
+.delete-btn {
+    background-color: #dc3545;  /* 赤色 */
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 13px;
+}
+
+.delete-btn:hover {
+    background-color: #c82333; 
+}
+
+/* ===== 削除フォームはインライン表示 ===== */
+.delete-form {
+    display: inline;
+    margin: 0;
+}
+
+/* ===== レスポンシブ対応（スマホなど小さい画面用） ===== */
+@media (max-width: 768px) {
+    .quantity-area {
+        flex-wrap: wrap;
+    }
+    
+    .add-area {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    textarea {
+        width: 100%;
+    }
+    
+    table {
+        font-size: 12px;
+    }
+    
+    th, td {
+        padding: 5px;
+    }
 }
