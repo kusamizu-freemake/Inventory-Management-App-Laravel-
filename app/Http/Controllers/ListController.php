@@ -8,79 +8,105 @@ use Illuminate\Support\Str;
 class ListController extends Controller
 {
     // ホームページ表示
-    public function index(Request $request)
+    public function ShowInventory(Request $request)
     {
-        $items = $request->session()->get('items', []);
-        return view('inventory', compact('items'));
+        $InventoryItems = $request->session()->get('InventoryItems', []);
+        $Updated = $request->session()->get('Updated', false);
+        return view('inventory', compact('InventoryItems', 'Updated'));
     }
 
     // アイテム追加
-    public function add(Request $request)
+    public function AddItem(Request $request)
     {
-        $items = $request->session()->get('items', []);
-        $id = Str::random(10);
+        $InventoryItems = $request->session()->get('InventoryItems', []);
+        $NewItemId = Str::random(10);
 
-        // JSから送られた現在時刻をそのまま使う
-        $items[] = [
-            'id' => $id,
+        // 新しいアイテムを追加
+        $InventoryItems[] = [
+            'id' => $NewItemId,
             'time' => $request->input('time', now()->format('H:i:s')),
             'quantity' => (int)str_replace(',', '', $request->input('quantity', 0)),
             'comment' => $request->input('comment', ''),
             'checked' => false,
         ];
 
-        $request->session()->put('items', $items);
-        return redirect()->route('home');
+        $request->session()->put('InventoryItems', $InventoryItems);
+        return redirect()->route('ShowInventory');
     }
 
     // アイテム全削除
-    public function clear(Request $request)
+    public function ClearAllItems(Request $request)
     {
-        $request->session()->forget('items');
-        return redirect()->route('home');
+        $request->session()->forget('InventoryItems');
+        return redirect()->route('ShowInventory');
     }
 
     // 合計数量取得
-    public function total(Request $request)
+    public function CalculateTotalQuantity(Request $request)
     {
-        $items = $request->session()->get('items', []);
+        $inventoryItems = $request->session()->get('InventoryItems', []);
 
         // チェックされた行の数量を合計
-        $total = 0;
-        foreach ($items as $item) {
-            if (!empty($item['checked'])) {
-                $total += (int)$item['quantity'];
+        $TotalQuantity = 0;
+        foreach ($inventoryItems as $inventoryItems) {
+            if (!empty($inventoryItems['checked'])) {
+                $TotalQuantity += (int)$inventoryItems['quantity'];
             }
         }
 
-        return response()->json(['total' => $total]);
+        return response()->json(['TotalQuantity' => $TotalQuantity]);
     }
 
     //  チェック状態切替
-    public function toggleCheck(Request $request, $id)
+    public function ToggleCheck(Request $request, $id)
     {
-        $items = $request->session()->get('items', []);
+        $InventoryItems = $request->session()->get('InventoryItems', []);
         
-        foreach ($items as &$item) {
-            if ($item['id'] === $id) {
-                $item['checked'] = !$item['checked'];
+        // 指定されたIDのアイテムのチェック状態を切り替え
+        foreach ($InventoryItems as &$InventoryItems) {
+            if ($InventoryItems['id'] === $id) {
+                $InventoryItems['checked'] = !$InventoryItems['checked'];
                 break;
             }
         }
         
-        $request->session()->put('items', $items);
+        $request->session()->put('InventoryItems', $InventoryItems);
         return response()->json(['success' => true]);
     }
 
 
     // アイテム削除
-    public function delete(Request $request, $id)
+    public function DeleteItem(Request $request, $ItemId)
     {
-        $items = $request->session()->get('items', []);
-        $items = array_filter($items, function ($item) use ($id) {
-            return $item['id'] !== $id;
+        $InventoryItems = $request->session()->get('InventoryItems', []);
+        // 指定されたアイテムを削除
+        $SpecifiedItems = array_filter($InventoryItems, function ($InventoryItems) use ($ItemId) {
+            return $InventoryItems['id'] !== $ItemId;
         });
-        $request->session()->put('items', array_values($items));
-        return redirect()->route('home');
+        $request->session()->put('InventoryItems', array_values($SpecifiedItems));
+        return redirect()->route('ShowInventory');
+    }
+
+    // 在庫リスト更新
+    public function UpdateItem(Request $request)
+    {
+        $InventoryItems = $request->session()->get('InventoryItems', []);
+
+        // フォームから送信された更新データを取得
+        $UpdateQuantities = $request->input('quantity', []);
+        $UpdateContents = $request->input('content', []);
+        // 指定されたアイテムを更新
+        foreach ($InventoryItems as &$InventoryItem) {
+            // 更新処理
+            if (isset($UpdateQuantities[$InventoryItem['id']])) {
+                $InventoryItem['quantity'] = (int)str_replace(',', '', $UpdateQuantities[$InventoryItem['id']]);
+            }
+            if (isset($UpdateContents[$InventoryItem['id']])) {
+                $InventoryItem['comment'] = $UpdateContents[$InventoryItem['id']];
+            }
+        }
+        // 更新結果をセッションに反映
+        $request->session()->put('InventoryItems', $InventoryItems);
+        return redirect()->route('ShowInventory')->with('Updated', true);
     }
 }

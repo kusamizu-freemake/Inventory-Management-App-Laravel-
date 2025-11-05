@@ -70,6 +70,20 @@ textarea {
     background-color: #218838;
 }
 
+/* ===== 更新ボタン */
+#updateBtn {
+    background-color: #17a2b8;  /* シアン色 */
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 14px;
+}
+#updateBtn:hover {
+    background-color: #117a8b;
+}
+
 /* ===== データ一覧テーブル ===== */
 table {
     border-collapse: collapse;  /* セルの境界線を重ねる */
