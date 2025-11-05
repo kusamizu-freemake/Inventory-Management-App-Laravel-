@@ -86,21 +86,24 @@ class ListController extends Controller
     }
 
     // 在庫リスト更新
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         $items = $request->session()->get('items', []);
+
+        $number = $request->input('number', []);
+        $commentcell = $request->input('comment-cell', []);
         // 指定されたアイテムを更新
         foreach ($items as &$item) {
-            if ($item['id'] === $id) {
-                // 更新処理（例: チェック状態を反転）
-                $item['checked'] = !$item['checked'];
-                break;
+            // 更新処理
+            if(isset($items['id'])){
+                $item['quantity'] = $number;
+                $item['comment'] = $comment-cell;
             }
+            break;
         }
         // 
         $request->session()->put('items', $items);
         $request->session()->put('updated', true);
-        return redirect()->route('home');
-            with('updated', true);
+        return redirect()->route('home')->with('updated', true);
     }
 }

@@ -11,7 +11,7 @@
     <h1>在庫管理リスト</h1>
 
     {{-- アイテム追加フォーム --}}
-    <form id="addForm" action="{{ route('add') }}" method="POST">
+    <form id="addForm" action="{{ route('add')}}" method="POST">
         @csrf
         
         {{-- 数量入力エリア --}}
@@ -28,12 +28,12 @@
             <textarea name="comment" placeholder="コメントを入力"></textarea>
             <button type="submit">追加</button>
         </div>
-
-        {{-- 更新ボタン --}}
-        <form action="{{ route('update') }}" method="POST" id="updateForm" style="display:inline;">
-            @csrf
-            <button type="submit" id="updateBtn">更新</button>
     </form>
+
+     {{-- 更新ボタン --}}
+    <form action="{{ route('update') }}" method="POST" id="updateForm" style="display:inline;">
+        @csrf
+        <button type="submit" id="updateBtn">更新</button>
 
     {{-- アイテム一覧表示 --}}
     <table>
@@ -54,9 +54,14 @@
                 <!-- 時刻（編集不可） -->
                 <td>{{ $item['time'] }}</td>
                 <!-- 数量（編集可能） -->
-                <td class="qty-cell">{{ number_format($item['quantity']) }}</td>
+                <td>
+                    <input type="number" name="quantity-cell" value="{{ $item['quantity'] }}" min="0" max="9999">
+                </td>
                 <!-- コメント（編集可能） -->
-                <td>{{ $item['comment'] }}</td>
+                <td>
+                    <textarea name="comment-cell">{{ $item['comment'] }}</textarea>
+                </td>
+                <!-- 削除ボタン -->
                 <td>
                     {{-- 削除フォーム --}}
                     <form action="{{ route('delete', $item['id']) }}" method="POST" style="display:inline;" class="delete-form">
