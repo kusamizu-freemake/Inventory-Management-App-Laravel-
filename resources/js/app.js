@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log("✅ app.js 読み込み成功");
 
     // 現在時刻の更新
-    function updateClock() {
+    function UpdateClock() {
         // 現在の日時を取得
         const now = new Date();
         // 日本時間形式で時刻を文字列化（例：13:45:30）
@@ -23,38 +23,38 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // 1秒（1000ミリ秒）ごとにupdateClock関数を実行
-    setInterval(updateClock, 1000);
+    setInterval(UpdateClock, 1000);
     // ページ読み込み時に即座に1回実行
-    updateClock();
+    UpdateClock();
 
     // 数量の増減ボタン
-    const QtyInput = document.getElementById('quantity'); // 数量入力フィールド
-    const IncrementBtn = document.getElementById('increment'); // ＋ボタン
-    const DecrementBtn = document.getElementById('decrement');// －ボタン
+    const QuantityInput = document.getElementById('quantity'); // 数量入力フィールド
+    const PlusBtn = document.getElementById('increment'); // ＋ボタン
+    const MinusBtn = document.getElementById('decrement');// －ボタン
     
     // ＋ボタンがクリックされたとき
-    if (IncrementBtn && QtyInput) {
-        IncrementBtn.addEventListener('click', function() {
+    if (PlusBtn && QuantityInput) {
+        PlusBtn.addEventListener('click', function() {
             // 現在の値を取得（カンマを削除してから整数に変換）
-            let val = parseInt(QtyInput.value.replace(/,/g, '')) || 0;
+            let val = parseInt(QuantityInput.value.replace(/,/g, '')) || 0;
             // 上限9999まで増やせる
             if (val < 9999) {
                 val++;
             }
             // カンマ区切りで表示（例：1234 → 1,234）
-            QtyInput.value = val.toLocaleString();
+            QuantityInput.value = val.toLocaleString();
         });
     }
     
     // −ボタンがクリックされたとき
-    if (DecrementBtn && QtyInput) {
-        DecrementBtn.addEventListener('click', function() {
-            let val = parseInt(QtyInput.value.replace(/,/g, '')) || 0;
+    if (MinusBtn && QuantityInput) {
+        MinusBtn.addEventListener('click', function() {
+            let val = parseInt(QuantityInput.value.replace(/,/g, '')) || 0;
             // 0より小さくならないように
             if (val > 0) {
                 val--;
             }
-            QtyInput.value = val.toLocaleString();
+            QuantityInput.value = val.toLocaleString();
         });
     }
 

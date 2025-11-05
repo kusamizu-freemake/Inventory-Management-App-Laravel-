@@ -21,7 +21,7 @@ class ListController extends Controller
         $InventoryItems = $request->session()->get('InventoryItems', []);
         $NewItemId = Str::random(10);
 
-        // JSから送られた現在時刻をそのまま使う
+        // 新しいアイテムを追加
         $InventoryItems[] = [
             'id' => $NewItemId,
             'time' => $request->input('time', now()->format('H:i:s')),
@@ -62,6 +62,7 @@ class ListController extends Controller
     {
         $InventoryItems = $request->session()->get('InventoryItems', []);
         
+        // 指定されたIDのアイテムのチェック状態を切り替え
         foreach ($InventoryItems as &$InventoryItems) {
             if ($InventoryItems['id'] === $id) {
                 $InventoryItems['checked'] = !$InventoryItems['checked'];
@@ -78,10 +79,11 @@ class ListController extends Controller
     public function DeleteItem(Request $request, $ItemId)
     {
         $InventoryItems = $request->session()->get('InventoryItems', []);
-        $InventoryItems = array_filter($InventoryItems, function ($InventoryItems) use ($ItemId) {
+        // 指定されたアイテムを削除
+        $SpecifiedItems = array_filter($InventoryItems, function ($InventoryItems) use ($ItemId) {
             return $InventoryItems['id'] !== $ItemId;
         });
-        $request->session()->put('InventoryItems', array_values($InventoryItems));
+        $request->session()->put('InventoryItems', array_values($SpecifiedItems));
         return redirect()->route('ShowInventory');
     }
 
@@ -90,8 +92,9 @@ class ListController extends Controller
     {
         $InventoryItems = $request->session()->get('InventoryItems', []);
 
-        $UpdateQuantities = $request->input('quantity', []); //
-        $UpdateContents = $request->input('content', []); //
+        // フォームから送信された更新データを取得
+        $UpdateQuantities = $request->input('quantity', []);
+        $UpdateContents = $request->input('content', []);
         // 指定されたアイテムを更新
         foreach ($InventoryItems as &$InventoryItem) {
             // 更新処理
