@@ -120,4 +120,17 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+
+    // 更新ボタンの確認ダイアログ
+    const updateForm = document.getElementById('updateForm');
+    if (updateForm) {
+        updateForm.addEventListener('submit', function(e) {
+            // 更新作業
+            
+            // 確認ダイアログを表示
+            if (!confirm('在庫リストを更新しますか？')) {
+                e.preventDefault(); 
+            }
+        });
+    }
 });

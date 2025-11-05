@@ -11,7 +11,8 @@ class ListController extends Controller
     public function index(Request $request)
     {
         $items = $request->session()->get('items', []);
-        return view('inventory', compact('items'));
+        $updated = $request->session()->get('updated', false);
+        return view('inventory', compact('items', 'updated'));
     }
 
     // アイテム追加
@@ -82,5 +83,24 @@ class ListController extends Controller
         });
         $request->session()->put('items', array_values($items));
         return redirect()->route('home');
+    }
+
+    // 在庫リスト更新
+    public function update(Request $request, $id)
+    {
+        $items = $request->session()->get('items', []);
+        // 指定されたアイテムを更新
+        foreach ($items as &$item) {
+            if ($item['id'] === $id) {
+                // 更新処理（例: チェック状態を反転）
+                $item['checked'] = !$item['checked'];
+                break;
+            }
+        }
+        // 
+        $request->session()->put('items', $items);
+        $request->session()->put('updated', true);
+        return redirect()->route('home');
+            with('updated', true);
     }
 }

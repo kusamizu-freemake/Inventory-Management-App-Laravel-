@@ -28,6 +28,11 @@
             <textarea name="comment" placeholder="コメントを入力"></textarea>
             <button type="submit">追加</button>
         </div>
+
+        {{-- 更新ボタン --}}
+        <form action="{{ route('update') }}" method="POST" id="updateForm" style="display:inline;">
+            @csrf
+            <button type="submit" id="updateBtn">更新</button>
     </form>
 
     {{-- アイテム一覧表示 --}}
@@ -44,9 +49,13 @@
         @foreach($items as $item)
             {{-- アイテム行 --}}
             <tr data-id="{{ $item['id'] }}" class="{{ $item['checked'] ? 'checked' : '' }}">
+                <!-- チェックボックス（編集不可） -->
                 <td><input type="checkbox" class="chk-qty" data-qty="{{ $item['quantity'] }}"></td>
+                <!-- 時刻（編集不可） -->
                 <td>{{ $item['time'] }}</td>
+                <!-- 数量（編集可能） -->
                 <td class="qty-cell">{{ number_format($item['quantity']) }}</td>
+                <!-- コメント（編集可能） -->
                 <td>{{ $item['comment'] }}</td>
                 <td>
                     {{-- 削除フォーム --}}
